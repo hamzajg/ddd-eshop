@@ -5,9 +5,10 @@ Guidance for AI agents (and humans) working in this repository.
 ## Project
 
 A Java/Gradle workspace for practising Domain-Driven Design by building an
-e-shop. **Early scaffold**: currently a single `Main` class ("Hello world!")
-+ Gradle build with JUnit 5 configured — no domain model yet. The repo is a
-blank DDD canvas.
+e-shop. **Early domain**: `com.hamzajg.eshop.domain.catalog` holds the first slice
+(`Product` aggregate + `Money` value object, 10 unit tests). Layout is
+recorded in `docs/adr/0002-domain-package-layout.md`. `Main.java` remains a
+placeholder.
 Stack: Java (Gradle wrapper), JUnit 5 (`junit-bom` 5.9.1), `useJUnitPlatform`.
 
 ## Commands
@@ -17,7 +18,7 @@ Verified 2026-11-13 against CI (`.github/workflows/ci.yml`) and README.
 | Task | Command |
 |---|---|
 | Build + test | `sh gradlew build --no-daemon` (CI: JDK 17 launcher) |
-| Tests only | `sh gradlew test` |
+| Tests only | `sh gradlew test` (10 tests) |
 
 Requires: JDK to run Gradle (CI uses 17). **Compilation toolchain is JDK 25**
 (`build.gradle` → `java.toolchain.languageVersion = 25`), auto-resolved.
@@ -32,10 +33,10 @@ build.gradle                            java toolchain 25 + junit-bom 5.9.1
 gradlew / gradle/wrapper                checked-in wrapper
 ```
 
-There is no domain yet. When the e-shop model arrives it should follow DDD
-conventions: domain layer framework-free (entities, value objects,
-repositories as interfaces), application layer for use cases — decide and
-record the package layout in an ADR before it grows.
+The domain lives in `com.hamzajg.eshop.domain.<context>` (ADR 0002): pure
+Java, framework-free. Repositories arrive as interfaces with their first
+application use case; `application`/`infrastructure` packages appear when
+needed.
 
 ## Conventions
 

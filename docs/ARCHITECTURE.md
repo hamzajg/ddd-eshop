@@ -12,9 +12,10 @@ ddd-eshop/   (Gradle, single module)
 └── src/main/java/com/hamzajg/Main.java   "Hello world!" placeholder
 ```
 
-**No domain model exists yet** — this is a scaffold for a DDD e-shop
-practice project. There are no tests, no packages beyond `com.hamzajg`,
-no `application` plugin (no `run` task).
+**First domain slice exists**: `com.hamzajg.eshop.domain.catalog` —
+`Product` aggregate + `Money` value object with 10 unit tests. Layout
+decided in `docs/adr/0002-domain-package-layout.md`. Still no
+`application` plugin (no `run` task) and no persistence.
 
 ## Intended direction (not yet built)
 
