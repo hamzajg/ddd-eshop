@@ -34,7 +34,8 @@ When implemented, the e-shop should follow DDD layering:
   `CatalogRepository`/`OrderRepository` interfaces, `Money` in
   `domain.shared`. `Customer`, payments and addresses are not modelled
   yet.
-- **Application** — `PlaceOrder` use case (command/result records).
+- **Application** — `PlaceOrder` + `ConfirmOrder`/`ShipOrder`/`CancelOrder`
+  lifecycle use cases over a shared `OrderTransition` skeleton.
 - **Infrastructure** — in-memory repository implementations only.
 - Keep the domain pure Java — no Spring/etc. in a DDD practice repo.
 
