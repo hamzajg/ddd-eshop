@@ -18,16 +18,18 @@ import java.util.Objects;
 public final class Order {
 
     private final String orderNumber;
+    private final String customerName;
     private final List<OrderLine> lines = new ArrayList<>();
     private OrderStatus status = OrderStatus.PLACED;
 
-    private Order(String orderNumber) {
+    private Order(String orderNumber, String customerName) {
         this.orderNumber = requireNonBlank(orderNumber, "orderNumber");
+        this.customerName = requireNonBlank(customerName, "customerName");
     }
 
-    /** Places a new order. Requires at least one line. */
-    public static Order place(String orderNumber, List<OrderLine> lines) {
-        Order order = new Order(orderNumber);
+    /** Places a new order for a customer. Requires at least one line. */
+    public static Order place(String orderNumber, String customerName, List<OrderLine> lines) {
+        Order order = new Order(orderNumber, customerName);
         if (lines == null || lines.isEmpty()) {
             throw new IllegalArgumentException("an order needs at least one line");
         }
@@ -37,6 +39,11 @@ public final class Order {
 
     public String orderNumber() {
         return orderNumber;
+    }
+
+    /** Name of the shopper who placed the order (snapshot at placement). */
+    public String customerName() {
+        return customerName;
     }
 
     public OrderStatus status() {

@@ -35,7 +35,14 @@ class PlaceOrderTest {
         for (int i = 0; i < skusAndQty.length; i += 2) {
             lines.add(new PlaceOrder.LineRequest(skusAndQty[i], Integer.parseInt(skusAndQty[i + 1])));
         }
-        return new PlaceOrder.Command(number, lines);
+        return new PlaceOrder.Command(number, "alice", lines);
+    }
+
+    @Test
+    void placedOrderRecordsCustomerName() {
+        placeOrder.execute(command("ORD-1", "SKU-A", "1"));
+        assertEquals("alice",
+                orders.findByNumber("ORD-1").orElseThrow().customerName());
     }
 
     @Test

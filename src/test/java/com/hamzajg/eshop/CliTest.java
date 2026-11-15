@@ -18,6 +18,7 @@ class CliTest {
 
     @Test
     void fullOrderLifecycleThroughCommands() {
+        cli.dispatch("login alice");
         assertTrue(cli.dispatch("place ORD-1 KB-1:2 MS-1:1")
                 .contains("total 119.97"));
         assertEquals("CONFIRMED ORD-1", cli.dispatch("confirm ORD-1"));
@@ -35,6 +36,13 @@ class CliTest {
         assertTrue(cli.dispatch("login alice").contains("back"));
         assertTrue(cli.dispatch("logout").contains("logged out"));
         assertTrue(cli.dispatch("login bob").contains("bob"));
+    }
+
+    @Test
+    void placingRequiresLogin() {
+        String out = cli.dispatch("place ORD-9 KB-1:1");
+        assertTrue(out.startsWith("error:"));
+        assertTrue(out.contains("log in"));
     }
 
     @Test

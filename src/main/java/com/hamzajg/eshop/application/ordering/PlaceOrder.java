@@ -21,7 +21,7 @@ public final class PlaceOrder {
     public record LineRequest(String sku, int quantity) {
     }
 
-    public record Command(String orderNumber, List<LineRequest> lines) {
+    public record Command(String orderNumber, String customerName, List<LineRequest> lines) {
     }
 
     public record Result(String orderNumber, Money total) {
@@ -47,7 +47,7 @@ public final class PlaceOrder {
             lines.add(toOrderLine(request));
         }
 
-        Order order = Order.place(command.orderNumber(), lines);
+        Order order = Order.place(command.orderNumber(), command.customerName(), lines);
         orders.save(order);
         return new Result(order.orderNumber(), order.total());
     }
