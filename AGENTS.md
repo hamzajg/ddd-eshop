@@ -8,8 +8,9 @@ A Java/Gradle workspace for practising Domain-Driven Design by building an
 e-shop. **Early vertical slice**: `domain.catalog` + `domain.ordering`
 aggregates, `domain.shared.Money`, repository interfaces in the domain,
 in-memory impls in `infrastructure`, and one application use case
-(`PlaceOrder`). 24 unit tests. Layout/use-case decisions recorded in
-`docs/adr/0002`–`0004`. `Main.java` remains a placeholder.
+(`PlaceOrder` + `ConfirmOrder`/`ShipOrder`/`CancelOrder` lifecycle
+use cases over a shared `OrderTransition` skeleton). 27 unit tests.
+Layout/use-case decisions recorded in `docs/adr/0002`–`0004`. `Main.java` remains a placeholder.
 Stack: Java (Gradle wrapper), JUnit 5 (`junit-bom` 5.9.1), `useJUnitPlatform`.
 
 ## Commands
@@ -36,7 +37,8 @@ src/main/java/com/hamzajg/eshop/domain/
   ordering/{Order,OrderLine,OrderStatus,OrderRepository}.java
   catalog/CatalogRepository.java               repo interfaces live in domain
   shared/Money.java                    money VO (add, multiply)
-application/ordering/PlaceOrder.java           first use case (command/result)
+application/ordering/{PlaceOrder,ConfirmOrder,ShipOrder,CancelOrder}.java
+                                              use cases (command/result records)
 infrastructure/InMemory*Repository.java        in-memory repo impls
 build.gradle                            java toolchain 25 + junit-bom 5.9.1
 gradlew / gradle/wrapper                checked-in wrapper
