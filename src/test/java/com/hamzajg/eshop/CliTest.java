@@ -31,6 +31,7 @@ class CliTest {
 
     @Test
     void loginGreetsShopperAndLogoutClearsSession() {
+        // covers scenarios: Shopper logs in; Repeat login reuses customer
         String first = cli.dispatch("login alice");
         assertTrue(first.contains("alice"));
         assertTrue(cli.dispatch("login alice").contains("back"));
@@ -40,6 +41,7 @@ class CliTest {
 
     @Test
     void ordersListsOnlyOwnOrders() {
+        // covers scenario: Order history shows own orders
         cli.dispatch("login alice");
         cli.dispatch("place ORD-A KB-1:1");
         cli.dispatch("login bob");
@@ -53,6 +55,7 @@ class CliTest {
 
     @Test
     void ordersEmptyAndRequiresLogin() {
+        // covers scenarios: Orders command requires login; Empty order history
         cli.dispatch("login carol");
         assertTrue(cli.dispatch("orders").contains("no orders"));
         Cli fresh = new Cli();
@@ -63,6 +66,7 @@ class CliTest {
 
     @Test
     void placingRequiresLogin() {
+        // covers scenario: Placing an order requires login
         String out = cli.dispatch("place ORD-9 KB-1:1");
         assertTrue(out.startsWith("error:"));
         assertTrue(out.contains("log in"));

@@ -40,6 +40,7 @@ class PlaceOrderTest {
 
     @Test
     void placedOrderRecordsCustomerName() {
+        // covers scenario: Order attributed to shopper
         placeOrder.execute(command("ORD-1", "SKU-A", "1"));
         assertEquals("alice",
                 orders.findByNumber("ORD-1").orElseThrow().customerName());
