@@ -20,4 +20,9 @@ public final class InMemoryCatalogRepository implements CatalogRepository {
     public Optional<Product> findBySku(String sku) {
         return Optional.ofNullable(bySku.get(sku));
     }
+
+    /** All products, for listings. In-memory impl detail — not on the interface. */
+    public java.util.List<Product> all() {
+        return java.util.List.copyOf(bySku.values());
+    }
 }
