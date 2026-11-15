@@ -39,6 +39,29 @@ class CliTest {
     }
 
     @Test
+    void ordersListsOnlyOwnOrders() {
+        cli.dispatch("login alice");
+        cli.dispatch("place ORD-A KB-1:1");
+        cli.dispatch("login bob");
+        cli.dispatch("place ORD-B MS-1:1");
+        cli.dispatch("login alice");
+        String out = cli.dispatch("orders");
+        assertTrue(out.contains("ORD-A"));
+        assertFalse(out.contains("ORD-B"));
+        assertTrue(out.contains("[PLACED]"));
+    }
+
+    @Test
+    void ordersEmptyAndRequiresLogin() {
+        cli.dispatch("login carol");
+        assertTrue(cli.dispatch("orders").contains("no orders"));
+        Cli fresh = new Cli();
+        String out = fresh.dispatch("orders");
+        assertTrue(out.startsWith("error:"));
+        assertTrue(out.contains("log in"));
+    }
+
+    @Test
     void placingRequiresLogin() {
         String out = cli.dispatch("place ORD-9 KB-1:1");
         assertTrue(out.startsWith("error:"));
