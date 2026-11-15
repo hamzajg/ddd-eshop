@@ -12,17 +12,25 @@ ddd-eshop/   (Gradle, single module)
 └── src/main/java/com/hamzajg/Main.java   "Hello world!" placeholder
 ```
 
-**First domain slice exists**: `com.hamzajg.eshop.domain.catalog` —
-`Product` aggregate + `Money` value object with 10 unit tests. Layout
-decided in `docs/adr/0002-domain-package-layout.md`. Still no
-`application` plugin (no `run` task) and no persistence.
+**Two domain slices exist**:
+
+- `domain.catalog` — `Product` aggregate.
+- `domain.ordering` — `Order` aggregate + `OrderLine` entities,
+  `OrderStatus` lifecycle (PLACED → CONFIRMED → SHIPPED / CANCELLED).
+- `domain.shared` — `Money` value object shared by both contexts
+  (moved out of `catalog` in ADR 0003).
+
+Layout decided in `docs/adr/0002` (packages) and `0003` (ordering +
+shared kernel). Still no `application` plugin (no `run` task) and no
+persistence.
 
 ## Intended direction (not yet built)
 
 When implemented, the e-shop should follow DDD layering:
 
 - **Domain** — framework-free: `Product`, `Order`, `Customer` aggregates,
-  value objects, domain events, repository interfaces.
+  value objects, domain events, repository interfaces. `Customer` and
+  further ordering behaviour (payments, addresses) are not modelled yet.
 - **Application** — use cases orchestrating the domain.
 - **Infrastructure** — repository implementations (TBD).
 - Keep the domain pure Java — no Spring/etc. in a DDD practice repo.

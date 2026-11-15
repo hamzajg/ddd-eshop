@@ -1,5 +1,7 @@
 package com.hamzajg.eshop.domain.catalog;
 
+import com.hamzajg.eshop.domain.shared.Money;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

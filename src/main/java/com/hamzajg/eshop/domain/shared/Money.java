@@ -1,4 +1,4 @@
-package com.hamzajg.eshop.domain.catalog;
+package com.hamzajg.eshop.domain.shared;
 
 /**
  * Money value object: an amount in minor units (cents) plus an ISO-4217
@@ -22,5 +22,12 @@ public record Money(long amountMinor, String currency) {
                     "cannot add " + other.currency + " to " + currency);
         }
         return new Money(amountMinor + other.amountMinor, currency);
+    }
+
+    public Money multiply(int factor) {
+        if (factor <= 0) {
+            throw new IllegalArgumentException("factor must be > 0, got " + factor);
+        }
+        return new Money(amountMinor * factor, currency);
     }
 }
