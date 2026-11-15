@@ -3,6 +3,7 @@ package com.hamzajg.eshop;
 import com.hamzajg.eshop.application.customer.LoginCustomer;
 import com.hamzajg.eshop.application.ordering.CancelOrder;
 import com.hamzajg.eshop.application.ordering.ConfirmOrder;
+import com.hamzajg.eshop.application.ordering.ListOrders;
 import com.hamzajg.eshop.application.ordering.PlaceOrder;
 import com.hamzajg.eshop.application.ordering.ShipOrder;
 import com.hamzajg.eshop.domain.catalog.Product;
@@ -44,6 +45,7 @@ public final class Cli {
     private final ConfirmOrder confirmOrder;
     private final ShipOrder shipOrder;
     private final CancelOrder cancelOrder;
+    private final ListOrders listOrders;
     private final LoginCustomer loginCustomer;
     private String sessionCustomer;
 
@@ -53,6 +55,7 @@ public final class Cli {
         confirmOrder = new ConfirmOrder(orders);
         shipOrder = new ShipOrder(orders);
         cancelOrder = new CancelOrder(orders);
+        listOrders = new ListOrders(orders);
         loginCustomer = new LoginCustomer(customers);
     }
 
@@ -78,6 +81,7 @@ public final class Cli {
                 case "ship" -> shipOrder.execute(arg(parts)) + " " + arg(parts);
                 case "cancel" -> cancelOrder.execute(arg(parts)) + " " + arg(parts);
                 case "show" -> show(arg(parts));
+                case "orders" -> orders();
                 case "quit", "exit" -> null;
                 default -> "unknown command: " + parts[0] + "\n" + USAGE;
             };
@@ -144,6 +148,25 @@ public final class Cli {
                 new PlaceOrder.Command(parts[1], sessionCustomer, lines));
         return "order " + result.orderNumber() + " placed, total "
                 + result.total().amountMinor() / 100.0 + " " + result.total().currency();
+    }
+
+    private String orders() {
+        if (sessionCustomer == null) {
+            throw new IllegalStateException("please log in to see your orders");
+        }
+        List<Order> mine = listOrders.execute(sessionCustomer);
+        if (mine.isEmpty()) {
+            return "no orders yet — happy shopping, " + sessionCustomer;
+        }
+        StringBuilder sb = new StringBuilder("your orders:");
+        for (Order order : mine) {
+            Money total = order.total();
+            sb.append("\n  ").append(order.orderNumber())
+                    .append(" [").append(order.status()).append("]  ")
+                    .append(total.amountMinor() / 100.0).append(' ')
+                    .append(total.currency());
+        }
+        return sb.toString();
     }
 
     private String show(String orderNumber) {
