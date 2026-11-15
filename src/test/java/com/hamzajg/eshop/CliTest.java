@@ -29,6 +29,15 @@ class CliTest {
     }
 
     @Test
+    void loginGreetsShopperAndLogoutClearsSession() {
+        String first = cli.dispatch("login alice");
+        assertTrue(first.contains("alice"));
+        assertTrue(cli.dispatch("login alice").contains("back"));
+        assertTrue(cli.dispatch("logout").contains("logged out"));
+        assertTrue(cli.dispatch("login bob").contains("bob"));
+    }
+
+    @Test
     void badCommandsReturnErrorsNotExceptions() {
         assertTrue(cli.dispatch("place ORD-2 NOPE:1").startsWith("error:"));
         assertTrue(cli.dispatch("show NOPE").startsWith("error:"));

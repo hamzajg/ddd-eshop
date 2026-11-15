@@ -1,5 +1,6 @@
 package com.hamzajg.eshop;
 
+import com.hamzajg.eshop.application.customer.LoginCustomer;
 import com.hamzajg.eshop.application.ordering.CancelOrder;
 import com.hamzajg.eshop.application.ordering.ConfirmOrder;
 import com.hamzajg.eshop.application.ordering.PlaceOrder;
@@ -9,6 +10,7 @@ import com.hamzajg.eshop.domain.ordering.Order;
 import com.hamzajg.eshop.domain.ordering.OrderLine;
 import com.hamzajg.eshop.domain.shared.Money;
 import com.hamzajg.eshop.infrastructure.InMemoryCatalogRepository;
+import com.hamzajg.eshop.infrastructure.InMemoryCustomerRepository;
 import com.hamzajg.eshop.infrastructure.InMemoryOrderRepository;
 
 import java.io.BufferedReader;
@@ -21,6 +23,8 @@ import java.util.List;
  * entry point until a real transport (HTTP) exists. Seeds a small demo
  * catalog, then reads one command per line:
  *
+ *   login <name>                  log in (registers on first use)
+ *   logout                        end the session
  *   catalog                      list products
  *   place <num> <SKU:qty>...     place an order
  *   confirm|ship|cancel <num>    order lifecycle
@@ -30,15 +34,18 @@ import java.util.List;
 public final class Cli {
 
     private static final String USAGE = """
-            commands: catalog | place <num> <SKU:qty>... | confirm <num> |
-            ship <num> | cancel <num> | show <num> | quit""";
+            commands: login <name> | logout | catalog | place <num> <SKU:qty>... |
+            confirm <num> | ship <num> | cancel <num> | show <num> | quit""";
 
     private final InMemoryCatalogRepository catalog = new InMemoryCatalogRepository();
+    private final InMemoryCustomerRepository customers = new InMemoryCustomerRepository();
     private final InMemoryOrderRepository orders = new InMemoryOrderRepository();
     private final PlaceOrder placeOrder;
     private final ConfirmOrder confirmOrder;
     private final ShipOrder shipOrder;
     private final CancelOrder cancelOrder;
+    private final LoginCustomer loginCustomer;
+    private String sessionCustomer;
 
     public Cli() {
         seedCatalog();
@@ -46,6 +53,7 @@ public final class Cli {
         confirmOrder = new ConfirmOrder(orders);
         shipOrder = new ShipOrder(orders);
         cancelOrder = new CancelOrder(orders);
+        loginCustomer = new LoginCustomer(customers);
     }
 
     private void seedCatalog() {
@@ -62,6 +70,8 @@ public final class Cli {
         }
         try {
             return switch (parts[0]) {
+                case "login" -> login(parts);
+                case "logout" -> logout();
                 case "catalog" -> catalogText();
                 case "place" -> place(parts);
                 case "confirm" -> confirmOrder.execute(arg(parts)) + " " + arg(parts);
@@ -81,6 +91,27 @@ public final class Cli {
             throw new IllegalArgumentException("missing order number");
         }
         return parts[1];
+    }
+
+    private String login(String[] parts) {
+        if (parts.length < 2) {
+            throw new IllegalArgumentException("usage: login <name>");
+        }
+        LoginCustomer.Result result = loginCustomer.execute(
+                new LoginCustomer.Command(parts[1]));
+        sessionCustomer = result.name();
+        return result.created()
+                ? "welcome, " + result.name() + " — happy shopping"
+                : "welcome back, " + result.name();
+    }
+
+    private String logout() {
+        if (sessionCustomer == null) {
+            return "not logged in";
+        }
+        String name = sessionCustomer;
+        sessionCustomer = null;
+        return "logged out " + name;
     }
 
     private String catalogText() {
