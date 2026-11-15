@@ -137,8 +137,11 @@ public final class Cli {
             }
             lines.add(new PlaceOrder.LineRequest(kv[0], Integer.parseInt(kv[1])));
         }
+        if (sessionCustomer == null) {
+            throw new IllegalStateException("please log in to place an order");
+        }
         PlaceOrder.Result result = placeOrder.execute(
-                new PlaceOrder.Command(parts[1], lines));
+                new PlaceOrder.Command(parts[1], sessionCustomer, lines));
         return "order " + result.orderNumber() + " placed, total "
                 + result.total().amountMinor() / 100.0 + " " + result.total().currency();
     }

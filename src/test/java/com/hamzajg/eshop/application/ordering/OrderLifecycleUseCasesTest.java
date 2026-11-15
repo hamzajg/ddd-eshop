@@ -32,7 +32,7 @@ class OrderLifecycleUseCasesTest {
     }
 
     private void place(String number) {
-        placeOrder.execute(new PlaceOrder.Command(number,
+        placeOrder.execute(new PlaceOrder.Command(number, "alice",
                 List.of(new PlaceOrder.LineRequest("SKU-A", 1))));
     }
 

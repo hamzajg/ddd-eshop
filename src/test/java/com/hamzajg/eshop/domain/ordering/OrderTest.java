@@ -15,21 +15,33 @@ class OrderTest {
     }
 
     private static Order twoLineOrder() {
-        return Order.place("ORD-1", List.of(
+        return Order.place("ORD-1", "alice", List.of(
                 line("SKU-A", 1000, 2),
                 line("SKU-B", 500, 1)));
     }
 
     @Test
+    void customerNameIsRecorded() {
+        Order order = twoLineOrder();
+        assertEquals("alice", order.customerName());
+    }
+
+    @Test
+    void blankCustomerNameRejected() {
+        assertThrows(IllegalArgumentException.class,
+                () -> Order.place("ORD", " ", List.of(line("S", 1, 1))));
+    }
+
+    @Test
     void placeRequiresOrderNumberAndLines() {
         assertThrows(IllegalArgumentException.class,
-                () -> Order.place(" ", List.of(line("S", 1, 1))));
+                () -> Order.place(" ", "alice", List.of(line("S", 1, 1))));
         assertThrows(IllegalArgumentException.class,
-                () -> Order.place("ORD", List.of()));
+                () -> Order.place("ORD", "alice", List.of()));
         assertThrows(IllegalArgumentException.class,
-                () -> Order.place("ORD", null));
+                () -> Order.place("ORD", "alice", null));
         assertThrows(NullPointerException.class,
-                () -> Order.place("ORD", Arrays.asList((OrderLine) null)));
+                () -> Order.place("ORD", "alice", Arrays.asList((OrderLine) null)));
     }
 
     @Test
@@ -54,7 +66,7 @@ class OrderTest {
         OrderLine eur = line("SKU-A", 1000, 1);
         OrderLine usd = new OrderLine("SKU-B", "desc", new Money(500, "USD"), 1);
         assertThrows(IllegalArgumentException.class,
-                () -> Order.place("ORD", List.of(eur, usd)));
+                () -> Order.place("ORD", "alice", List.of(eur, usd)));
     }
 
     @Test
