@@ -5,10 +5,12 @@ Guidance for AI agents (and humans) working in this repository.
 ## Project
 
 A Java/Gradle workspace for practising Domain-Driven Design by building an
-e-shop. **Early domain**: `com.hamzajg.eshop.domain.catalog` holds the first slice
-(`Product` aggregate + `Money` value object, 10 unit tests). Layout is
-recorded in `docs/adr/0002-domain-package-layout.md`. `Main.java` remains a
-placeholder.
+e-shop. **Early domain**: two bounded-context slices exist —
+`domain.catalog` (`Product` aggregate) and `domain.ordering` (`Order`
+aggregate + `OrderLine`, `OrderStatus` lifecycle), plus `domain.shared`
+(`Money` value object used by both). 20 unit tests. Layout is recorded in
+`docs/adr/0002` (packages) and `0003` (ordering + shared kernel).
+`Main.java` remains a placeholder.
 Stack: Java (Gradle wrapper), JUnit 5 (`junit-bom` 5.9.1), `useJUnitPlatform`.
 
 ## Commands
@@ -28,7 +30,11 @@ placeholder.
 ## Architecture
 
 ```
-src/main/java/com/hamzajg/Main.java     placeholder entry point
+src/main/java/com/hamzajg/Main.java                  placeholder entry point
+src/main/java/com/hamzajg/eshop/domain/
+  shared/Money.java                    money VO (add, multiply)
+  catalog/Product.java                 product aggregate
+  ordering/{Order,OrderLine,OrderStatus}.java   order aggregate + lifecycle
 build.gradle                            java toolchain 25 + junit-bom 5.9.1
 gradlew / gradle/wrapper                checked-in wrapper
 ```
@@ -57,7 +63,9 @@ needed.
   document it.
 - `Main.java` is a placeholder — don't build features on it; the e-shop
   domain deserves its own packages.
-- Package root is `com.hamzajg` — flat, no subdomain packages yet.
+- Package root is `com.hamzajg`; domain sub-packages are
+  `eshop.domain.<context>` + `eshop.domain.shared` — contexts must not
+  import each other's types (ADR 0003).
 
 ## Agent rules
 

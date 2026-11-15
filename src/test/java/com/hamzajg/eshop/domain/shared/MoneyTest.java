@@ -1,4 +1,4 @@
-package com.hamzajg.eshop.domain.catalog;
+package com.hamzajg.eshop.domain.shared;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +27,15 @@ class MoneyTest {
     void refusesMixedCurrencies() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Money(100, "EUR").add(new Money(100, "USD")));
+    }
+
+    @Test
+    void multipliesKeepingCurrency() {
+        assertEquals(new Money(2997, "EUR"), new Money(999, "EUR").multiply(3));
+        assertThrows(IllegalArgumentException.class,
+                () -> new Money(100, "EUR").multiply(0));
+        assertThrows(IllegalArgumentException.class,
+                () -> new Money(100, "EUR").multiply(-1));
     }
 
     @Test
