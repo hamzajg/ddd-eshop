@@ -5,12 +5,17 @@ e-shop.
 
 ## Current state
 
-This repository is an **early scaffold**. It currently contains a single
-`Main` class and a Gradle build with JUnit 5 configured — no domain model or
-e-shop features have been implemented yet.
+This repository is a **runnable e-shop MVP**: an interactive CLI
+(`gradlew run`) with a seeded catalog, order placement and lifecycle
+(confirm/ship/cancel), and shopper accounts — log in with a name, orders
+are attributed to you, and `orders` lists your history.
 
 ```
-src/main/java/com/hamzajg/Main.java
+src/main/java/com/hamzajg/eshop/Cli.java
+src/main/java/com/hamzajg/eshop/domain/         bounded contexts
+src/main/java/com/hamzajg/eshop/application/    use cases
+src/main/java/com/hamzajg/eshop/infrastructure/ in-memory repositories
+specs/                                 spec-driven feature artifacts
 ```
 
 ## Tech stack
@@ -25,8 +30,9 @@ src/main/java/com/hamzajg/Main.java
 ./gradlew build
 ```
 
-The `java` plugin is applied without the `application` plugin, so there is no
-`run` task yet; `Main` is a placeholder entry point.
+The `application` plugin is applied — `./gradlew run` starts the CLI.
+Note the compile toolchain is JDK 25 (auto-resolved by Gradle); the Gradle
+daemon itself runs on your launcher JDK.
 
 ## Tests
 

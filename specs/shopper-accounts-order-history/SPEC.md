@@ -42,7 +42,7 @@ open — a real e-shop needs a shopper who owns their orders.
 | 3 | An order placed while logged in records the shopper's name | Order attributed to shopper |
 | 4 | `orders` lists only the logged-in shopper's orders | Order history shows own orders |
 | 5 | A shopper with no orders sees an explicit empty history | Empty order history |
-| 6 | `place` and `orders` fail clearly when nobody is logged in | Commands require login |
+| 6 | `place` and `orders` fail clearly when nobody is logged in | Placing an order requires login; Orders command requires login |
 
 ## Decisions
 

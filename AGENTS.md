@@ -8,9 +8,13 @@ A Java/Gradle workspace for practising Domain-Driven Design by building an
 e-shop. **Runnable vertical slice**: `domain.catalog` + `domain.ordering`
 aggregates, `domain.shared.Money`, repository interfaces in the domain,
 in-memory impls in `infrastructure`, application use cases
-(`PlaceOrder` + `ConfirmOrder`/`ShipOrder`/`CancelOrder`), and a CLI
-entry point (`eshop.Cli`, `gradlew run`). 30 unit tests. Decisions
-recorded in `docs/adr/0002`–`0005`. `Main.java` remains a placeholder.
+(`PlaceOrder`/`ListOrders` + `ConfirmOrder`/`ShipOrder`/`CancelOrder`),
+`application.customer.LoginCustomer`, `domain.customer`, a CLI entry
+point (`eshop.Cli`, `gradlew run`) with login/logout session, order
+attribution and `orders` history. Spec-driven artifacts live in
+`specs/<feature>/` (SPEC/EXAMPLES/BACKLOG/WAVES/VALIDATION + PRODUCT.md).
+Decisions recorded in `docs/adr/0002`–`0005`. `Main.java` remains a
+placeholder.
 Stack: Java (Gradle wrapper), JUnit 5 (`junit-bom` 5.9.1), `useJUnitPlatform`.
 
 ## Commands
@@ -38,8 +42,10 @@ src/main/java/com/hamzajg/eshop/
     shared/Money.java                   money VO (add, multiply)
     catalog/{Product,CatalogRepository}.java
     ordering/{Order,OrderLine,OrderStatus,OrderRepository}.java
-  application/ordering/{PlaceOrder,ConfirmOrder,ShipOrder,CancelOrder,
-                        OrderTransition}.java   use cases (records + shared skeleton)
+    customer/{Customer,CustomerRepository}.java
+  application/ordering/{PlaceOrder,ListOrders,ConfirmOrder,ShipOrder,
+                        CancelOrder,OrderTransition}.java   use cases
+  application/customer/LoginCustomer.java
   infrastructure/InMemory*Repository.java      in-memory repo impls
 build.gradle                            java toolchain 25 + application plugin
 ```
