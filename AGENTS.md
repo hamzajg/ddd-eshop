@@ -5,12 +5,11 @@ Guidance for AI agents (and humans) working in this repository.
 ## Project
 
 A Java/Gradle workspace for practising Domain-Driven Design by building an
-e-shop. **Early domain**: two bounded-context slices exist —
-`domain.catalog` (`Product` aggregate) and `domain.ordering` (`Order`
-aggregate + `OrderLine`, `OrderStatus` lifecycle), plus `domain.shared`
-(`Money` value object used by both). 20 unit tests. Layout is recorded in
-`docs/adr/0002` (packages) and `0003` (ordering + shared kernel).
-`Main.java` remains a placeholder.
+e-shop. **Early vertical slice**: `domain.catalog` + `domain.ordering`
+aggregates, `domain.shared.Money`, repository interfaces in the domain,
+in-memory impls in `infrastructure`, and one application use case
+(`PlaceOrder`). 24 unit tests. Layout/use-case decisions recorded in
+`docs/adr/0002`–`0004`. `Main.java` remains a placeholder.
 Stack: Java (Gradle wrapper), JUnit 5 (`junit-bom` 5.9.1), `useJUnitPlatform`.
 
 ## Commands
@@ -34,15 +33,18 @@ src/main/java/com/hamzajg/Main.java                  placeholder entry point
 src/main/java/com/hamzajg/eshop/domain/
   shared/Money.java                    money VO (add, multiply)
   catalog/Product.java                 product aggregate
-  ordering/{Order,OrderLine,OrderStatus}.java   order aggregate + lifecycle
+  ordering/{Order,OrderLine,OrderStatus,OrderRepository}.java
+  catalog/CatalogRepository.java               repo interfaces live in domain
+  shared/Money.java                    money VO (add, multiply)
+application/ordering/PlaceOrder.java           first use case (command/result)
+infrastructure/InMemory*Repository.java        in-memory repo impls
 build.gradle                            java toolchain 25 + junit-bom 5.9.1
 gradlew / gradle/wrapper                checked-in wrapper
 ```
 
-The domain lives in `com.hamzajg.eshop.domain.<context>` (ADR 0002): pure
-Java, framework-free. Repositories arrive as interfaces with their first
-application use case; `application`/`infrastructure` packages appear when
-needed.
+Layers per ADR 0002/0004: `domain.<context>` (pure Java, repo interfaces
+inside), `application.<context>` (use cases, command/result records),
+`infrastructure` (repo impls — in-memory only so far).
 
 ## Conventions
 
