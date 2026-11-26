@@ -23,12 +23,13 @@ Verified 2026-11-13 against CI (`.github/workflows/ci.yml`) and README.
 
 | Task | Command |
 |---|---|
-| Build + test | `sh gradlew build --no-daemon` (CI: JDK 17 launcher) |
+| Build + test | `sh gradlew build --no-daemon` (CI: JDK 25) |
 | Tests only | `sh gradlew test` (30 tests) |
 | Run demo | `sh gradlew run` (REPL) or `--args="catalog"` / `"place ORD-1 KB-1:2"` |
 
-Requires: JDK to run Gradle (CI uses 17). **Compilation toolchain is JDK 25**
-(`build.gradle` → `java.toolchain.languageVersion = 25`), auto-resolved.
+Requires: JDK 25 to run Gradle and to compile. **Compilation toolchain is
+JDK 25** (`build.gradle` → `java.toolchain.languageVersion = 25`),
+auto-resolved.
 `application` plugin is applied with `mainClass = com.hamzajg.eshop.Cli`
 (ADR 0005) — `gradlew run` works; `Main.java` stays a placeholder.
 
@@ -69,7 +70,7 @@ transport shell.
 ## Landmines
 
 - **Default branch is `main`, not `master`.**
-- JDK 17 launcher / JDK 25 toolchain split — don't "fix" the numbers.
+- The wrapper is 9.9.1 because older Gradle releases cannot run on JDK 25.
 - `gradlew run` exists via the `application` plugin → `eshop.Cli`
   (ADR 0005). `Main.java` is still a placeholder — don't build on it;
   new behaviour goes in `eshop.*` packages.

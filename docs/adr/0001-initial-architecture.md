@@ -15,9 +15,9 @@ one `Main` placeholder and a Gradle build with JUnit 5 configured.
    Rationale: the exercise is domain modelling, not app plumbing.
 2. **JUnit 5 (Jupiter) via junit-bom 5.9.1 + `useJUnitPlatform()`.**
    Modern test stack ready for when tests arrive.
-3. **JDK 25 toolchain on a JDK 17 launcher.** `java.toolchain.
-   languageVersion = 25`; CI runs Gradle on 17 and lets the toolchain
-   auto-resolve 25. Rationale: fleet SDK standardisation.
+3. **JDK 25 launcher and toolchain.** `java.toolchain.languageVersion = 25`;
+   CI and the wrapper both run on 25 and the toolchain resolves 25. Rationale:
+   fleet SDK standardisation.
 4. **Package root `com.hamzajg`, flat.** No subdomain packages yet —
    layout deferred until the domain model exists.
 5. **Default branch `main`.** (Unlike sibling Java repos on `master`.)
