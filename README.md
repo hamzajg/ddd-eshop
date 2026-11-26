@@ -21,7 +21,7 @@ specs/                                 spec-driven feature artifacts
 ## Tech stack
 
 - Java
-- Gradle 8.2 (wrapper included)
+- Gradle 9.9.1 (wrapper included)
 - JUnit 5 (`junit-bom` 5.9.1)
 
 ## Building
