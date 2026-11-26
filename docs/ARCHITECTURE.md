@@ -48,5 +48,5 @@ The package layout and layering decisions should be recorded as an ADR in
 
 ## Toolchain
 
-Gradle runs on CI's JDK 17; `java.toolchain.languageVersion = 25` selects
+Gradle runs on CI's JDK 25; `java.toolchain.languageVersion = 25` selects
 the compile JDK (auto-resolved). JUnit 5 via the platform.
